@@ -1,0 +1,1128 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Task Management App</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <style>
+            :root {
+                --primary-color: #4361ee;
+                --primary-dark: #3a56d4;
+                --secondary-color: #7209b7;
+                --success-color: #4caf50;
+                --success-dark: #388e3c;
+                --danger-color: #f44336;
+                --danger-dark: #d32f2f;
+                --text-primary: #333;
+                --text-secondary: #666;
+                --bg-primary: #fff;
+                --bg-secondary: #f8f9fa;
+                --border-color: #dee2e6;
+                --card-bg: #ffffff;
+                --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                --gradient-bg: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+                --header-bg: linear-gradient(135deg, #4361ee 0%, #7209b7 100%);
+                --transition-speed: 0.3s;
+            }
+
+            [data-theme="dark"] {
+                --primary-color: #6c8bff;
+                --primary-dark: #5a75e6;
+                --secondary-color: #9d4edd;
+                --success-color: #4caf50;
+                --success-dark: #388e3c;
+                --danger-color: #f44336;
+                --danger-dark: #d32f2f;
+                --text-primary: #f0f0f0;
+                --text-secondary: #b0b0b0;
+                --bg-primary: #121212;
+                --bg-secondary: #1e1e1e;
+                --border-color: #333;
+                --card-bg: #2a2a2a;
+                --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+                --gradient-bg: linear-gradient(135deg, #1f1f1f 0%, #2d2d2d 100%);
+                --header-bg: linear-gradient(135deg, #4361ee 0%, #7209b7 100%);
+                --transition-speed: 0.3s;
+            }
+
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+                transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed);
+            }
+
+            body {
+                font-family: 'Poppins', sans-serif;
+                max-width: 850px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: var(--bg-primary);
+                color: var(--text-primary);
+                line-height: 1.6;
+            }
+
+            .app-header {
+                background: var(--header-bg);
+                border-radius: 15px;
+                padding: 20px 25px;
+                margin-bottom: 30px;
+                color: white;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .app-header h1 {
+                margin: 0;
+                font-weight: 600;
+                font-size: 1.8rem;
+                text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+            }
+
+            .theme-toggle {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.5rem;
+                cursor: pointer;
+                padding: 5px;
+                border-radius: 50%;
+                transition: transform 0.3s, background-color 0.3s;
+            }
+
+            .theme-toggle:hover {
+                background-color: rgba(255, 255, 255, 0.2);
+                transform: rotate(30deg);
+            }
+
+            h1, h2, h3 {
+                color: var(--primary-color);
+                font-weight: 600;
+            }
+
+            h2 {
+                margin-bottom: 20px;
+                font-size: 1.5rem;
+                position: relative;
+                padding-bottom: 10px;
+            }
+
+            h2::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 50px;
+                height: 3px;
+                background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+                border-radius: 3px;
+            }
+
+            .task-list {
+                margin-top: 20px;
+            }
+
+            .task-item {
+                background-color: var(--card-bg);
+                border: 1px solid var(--border-color);
+                padding: 20px;
+                margin-bottom: 20px;
+                border-radius: 12px;
+                box-shadow: var(--card-shadow);
+                transition: transform 0.3s, box-shadow 0.3s;
+                animation: fadeIn 0.5s ease-out;
+            }
+
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+
+            .task-item:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .task-item h3 {
+                margin-top: 0;
+                font-size: 1.2rem;
+                color: var(--primary-color);
+                border-bottom: 1px solid var(--border-color);
+                padding-bottom: 10px;
+                margin-bottom: 15px;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 500;
+                color: var(--text-primary);
+            }
+
+            input[type="text"], textarea {
+                width: 100%;
+                padding: 12px;
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                font-family: 'Poppins', sans-serif;
+                font-size: 0.95rem;
+                background-color: var(--bg-primary);
+                color: var(--text-primary);
+                transition: border-color 0.3s, box-shadow 0.3s;
+            }
+
+            input[type="text"]:focus, textarea:focus {
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+                outline: none;
+            }
+
+            textarea {
+                min-height: 120px;
+                resize: vertical;
+            }
+
+            button {
+                background-color: var(--primary-color);
+                color: white;
+                padding: 12px 20px;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                font-family: 'Poppins', sans-serif;
+                font-weight: 500;
+                margin-right: 10px;
+                transition: background-color 0.3s, transform 0.2s;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                display: inline-flex;
+                align-items: center;
+            }
+
+            button i {
+                margin-right: 8px;
+            }
+
+            button:hover {
+                background-color: var(--primary-dark);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            }
+
+            button:active {
+                transform: translateY(0);
+            }
+
+            button.success {
+                background-color: var(--success-color);
+            }
+
+            button.success:hover {
+                background-color: var(--success-dark);
+            }
+
+            button.delete {
+                background-color: var(--danger-color);
+            }
+
+            button.delete:hover {
+                background-color: var(--danger-dark);
+            }
+
+            .tabs {
+                display: flex;
+                margin-bottom: 25px;
+                overflow: hidden;
+                border-radius: 10px;
+                background-color: var(--bg-secondary);
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+
+            .tab {
+                padding: 15px 20px;
+                cursor: pointer;
+                background-color: var(--bg-secondary);
+                color: var(--text-secondary);
+                font-weight: 500;
+                text-align: center;
+                transition: all 0.3s ease;
+                flex: 1;
+                position: relative;
+                overflow: hidden;
+                z-index: 1;
+            }
+
+            .tab::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+                opacity: 0;
+                z-index: -1;
+                transition: opacity 0.3s ease;
+            }
+
+            .tab:hover {
+                color: var(--text-primary);
+            }
+
+            .tab.active {
+                color: white;
+                font-weight: 600;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+
+            .tab.active::before {
+                opacity: 1;
+            }
+
+            .tab-content {
+                display: none;
+                animation: fadeIn 0.5s ease-out forwards;
+                background-color: var(--bg-primary);
+                padding: 20px;
+                border-radius: 12px;
+                box-shadow: var(--card-shadow);
+            }
+
+            .tab-content.active {
+                display: block;
+            }
+
+            .ai-options {
+                margin-bottom: 20px;
+                padding: 15px;
+                background-color: var(--bg-secondary);
+                border-radius: 8px;
+            }
+
+            .ai-options label {
+                margin-bottom: 12px;
+                font-weight: 600;
+            }
+
+            .ai-option {
+                margin-right: 15px;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+            }
+
+            .ai-option input[type="radio"] {
+                margin-right: 5px;
+                accent-color: var(--primary-color);
+            }
+
+            .loading {
+                display: none;
+                color: var(--text-secondary);
+                font-style: italic;
+                margin: 15px 0;
+                padding: 10px;
+                background-color: var(--bg-secondary);
+                border-radius: 8px;
+                text-align: center;
+                animation: pulse 1.5s infinite;
+            }
+
+            @keyframes pulse {
+                0% { opacity: 0.6; }
+                50% { opacity: 1; }
+                100% { opacity: 0.6; }
+            }
+
+            .task-description {
+                margin-bottom: 20px;
+                line-height: 1.6;
+                position: relative;
+                overflow: hidden;
+                color: var(--text-primary);
+                background-color: var(--bg-primary);
+                border-radius: 8px;
+                padding: 10px 0;
+            }
+
+            .task-description.collapsed {
+                max-height: 100px;
+            }
+
+            .task-description p {
+                margin-bottom: 12px;
+            }
+
+            .task-description strong {
+                font-weight: 600;
+                color: var(--primary-color);
+            }
+
+            .task-description em {
+                font-style: italic;
+                color: var(--secondary-color);
+            }
+
+            .task-description ul {
+                margin-left: 20px;
+                margin-bottom: 12px;
+            }
+
+            .task-description li {
+                list-style-type: disc;
+                margin-bottom: 8px;
+            }
+
+            .task-description br {
+                line-height: 2;
+            }
+
+            .toggle-description {
+                background-color: var(--bg-secondary);
+                color: var(--text-primary);
+                border: 1px solid var(--border-color);
+                padding: 8px 15px;
+                font-size: 0.85rem;
+                cursor: pointer;
+                margin-bottom: 15px;
+                display: none;
+                border-radius: 20px;
+                font-weight: 500;
+                transition: all 0.3s;
+            }
+
+            .toggle-description:hover {
+                background-color: var(--primary-color);
+                color: white;
+                border-color: var(--primary-color);
+            }
+
+            .fade-overlay {
+                display: none;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 50px;
+                background: linear-gradient(transparent, var(--card-bg));
+                pointer-events: none;
+            }
+
+            .task-description.collapsed .fade-overlay {
+                display: block;
+            }
+
+            .action-buttons {
+                display: flex;
+                margin-top: 15px;
+            }
+
+            .action-buttons button {
+                flex: 1;
+                justify-content: center;
+                max-width: 120px;
+            }
+
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                body {
+                    padding: 15px;
+                }
+
+                .app-header {
+                    padding: 15px;
+                }
+
+                .app-header h1 {
+                    font-size: 1.5rem;
+                }
+
+                .tabs {
+                    flex-direction: column;
+                }
+
+                .action-buttons {
+                    flex-direction: column;
+                }
+
+                .action-buttons button {
+                    margin: 5px 0;
+                    max-width: 100%;
+                }
+            }
+
+            /* Empty state */
+            .empty-state {
+                text-align: center;
+                padding: 40px 20px;
+                color: var(--text-secondary);
+            }
+
+            .empty-state i {
+                font-size: 3rem;
+                margin-bottom: 20px;
+                opacity: 0.6;
+            }
+
+            .empty-state p {
+                font-size: 1.1rem;
+                margin-bottom: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <header class="app-header">
+            <h1><i class="fas fa-tasks"></i> Task Management</h1>
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </header>
+
+        <div class="tabs">
+            <div class="tab active" data-tab="tasks"><i class="fas fa-list"></i> Tasks</div>
+            <div class="tab" data-tab="create"><i class="fas fa-plus"></i> Create Task</div>
+            <div class="tab" data-tab="edit"><i class="fas fa-edit"></i> Edit Task</div>
+        </div>
+
+        <div id="tasks" class="tab-content active">
+            <h2>All Tasks</h2>
+            <button id="refresh-tasks"><i class="fas fa-sync-alt"></i> Refresh</button>
+            <div id="loading-tasks" class="loading"><i class="fas fa-spinner fa-spin"></i> Loading tasks...</div>
+            <div id="task-list" class="task-list">
+                <!-- Tasks will be displayed here -->
+            </div>
+        </div>
+
+        <div id="create" class="tab-content">
+            <h2>Create New Task</h2>
+            <form id="create-task-form">
+                <div class="form-group">
+                    <label for="title">Task Title:</label>
+                    <input type="text" id="title" name="title" placeholder="Enter task title" required />
+                </div>
+
+                <div class="ai-options">
+                    <label>AI Model for Description:</label>
+                    <label class="ai-option">
+                        <input
+                            type="radio"
+                            name="ai-model"
+                            value="default"
+                            checked
+                        />
+                        Anthropic
+                    </label>
+                    <label class="ai-option">
+                        <input type="radio" name="ai-model" value="ollama" />
+                        Ollama
+                    </label>
+                    <label class="ai-option">
+                        <input type="radio" name="ai-model" value="gemini" />
+                        Gemini
+                    </label>
+                </div>
+
+                <div id="loading-create" class="loading">
+                    <i class="fas fa-robot fa-spin"></i> Creating task with AI description...
+                </div>
+                <button type="submit" class="success"><i class="fas fa-plus-circle"></i> Create Task</button>
+            </form>
+        </div>
+
+        <div id="edit" class="tab-content">
+            <h2>Edit Task</h2>
+            <p class="empty-state" id="edit-placeholder">
+                <i class="fas fa-edit"></i>
+                <p>Select a task from the list to edit it.</p>
+            </p>
+            <form id="edit-task-form" style="display: none">
+                <input type="hidden" id="edit-id" />
+                <div class="form-group">
+                    <label for="edit-title">Task Title:</label>
+                    <input type="text" id="edit-title" name="title" placeholder="Enter task title" required />
+                </div>
+                <div class="form-group">
+                    <label for="edit-description">Task Description:</label>
+                    <textarea
+                        id="edit-description"
+                        name="description"
+                        placeholder="Enter task description"
+                        required
+                    ></textarea>
+                </div>
+                <div id="loading-edit" class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Updating task...
+                </div>
+                <div class="action-buttons">
+                    <button type="submit" class="success"><i class="fas fa-save"></i> Update</button>
+                    <button type="button" id="cancel-edit" class="delete"><i class="fas fa-times"></i> Cancel</button>
+                </div>
+            </form>
+        </div>
+
+        <script>
+            // DOM elements
+            const tabButtons = document.querySelectorAll(".tab");
+            const tabContents = document.querySelectorAll(".tab-content");
+            const taskList = document.getElementById("task-list");
+            const refreshButton = document.getElementById("refresh-tasks");
+            const createForm = document.getElementById("create-task-form");
+            const editForm = document.getElementById("edit-task-form");
+            const editPlaceholder = document.getElementById("edit-placeholder");
+            const cancelEditButton = document.getElementById("cancel-edit");
+            const themeToggle = document.getElementById("theme-toggle");
+
+            // API base URL
+            const API_URL = "http://localhost:8080";
+
+            // Theme toggle functionality
+            themeToggle.addEventListener("click", () => {
+                const htmlElement = document.documentElement;
+                const currentTheme = htmlElement.getAttribute("data-theme");
+                const newTheme = currentTheme === "light" ? "dark" : "light";
+
+                htmlElement.setAttribute("data-theme", newTheme);
+
+                // Update icon
+                const themeIcon = themeToggle.querySelector("i");
+                if (newTheme === "dark") {
+                    themeIcon.classList.remove("fa-moon");
+                    themeIcon.classList.add("fa-sun");
+                } else {
+                    themeIcon.classList.remove("fa-sun");
+                    themeIcon.classList.add("fa-moon");
+                }
+
+                // Save theme preference
+                localStorage.setItem("theme", newTheme);
+            });
+
+            // Load saved theme preference
+            document.addEventListener("DOMContentLoaded", () => {
+                const savedTheme = localStorage.getItem("theme");
+                if (savedTheme) {
+                    document.documentElement.setAttribute("data-theme", savedTheme);
+
+                    // Update icon based on saved theme
+                    const themeIcon = themeToggle.querySelector("i");
+                    if (savedTheme === "dark") {
+                        themeIcon.classList.remove("fa-moon");
+                        themeIcon.classList.add("fa-sun");
+                    }
+                }
+            });
+
+            // Format description with markdown-like rendering
+            function formatDescription(description) {
+                if (!description) return "";
+
+                // Handle newlines
+                let formatted = description.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>');
+
+                // Handle bold text (** **)
+                formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+                // Handle italic text (* *)
+                formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+                // Handle bullet points
+                formatted = formatted.replace(/^\s*\*\s+(.*?)$/gm, '<li>$1</li>');
+                formatted = formatted.replace(/<li>(.*?)<\/li>/g, function(match) {
+                    return '<ul>' + match + '</ul>';
+                });
+
+                // Remove duplicate ul tags
+                formatted = formatted.replace(/<\/ul>\s*<ul>/g, '');
+
+                // Wrap in paragraph if needed
+                if (!formatted.startsWith('<p>')) {
+                    formatted = '<p>' + formatted + '</p>';
+                }
+
+                return formatted;
+            }
+
+            // Toggle description expand/collapse
+            function toggleDescription(event) {
+                const button = event.target;
+                const descriptionDiv = button.previousElementSibling;
+
+                if (descriptionDiv.classList.contains('collapsed')) {
+                    // Expand
+                    descriptionDiv.classList.remove('collapsed');
+                    button.textContent = 'Show Less';
+                } else {
+                    // Collapse
+                    descriptionDiv.classList.add('collapsed');
+                    button.textContent = 'Show More';
+                }
+            }
+
+            // Check if description needs a toggle button (based on content height)
+            function checkDescriptionLength(descriptionDiv, toggleButton) {
+                if (descriptionDiv.scrollHeight > 100) {
+                    descriptionDiv.classList.add('collapsed');
+                    toggleButton.style.display = 'inline-block';
+                    toggleButton.textContent = 'Show More';
+                } else {
+                    toggleButton.style.display = 'none';
+                }
+            }
+
+            // Tab switching
+            tabButtons.forEach((button) => {
+                button.addEventListener("click", () => {
+                    // Deactivate all tabs
+                    tabButtons.forEach((btn) => btn.classList.remove("active"));
+                    tabContents.forEach((content) =>
+                        content.classList.remove("active"),
+                    );
+
+                    // Activate clicked tab
+                    button.classList.add("active");
+                    const tabId = button.getAttribute("data-tab");
+                    document.getElementById(tabId).classList.add("active");
+                });
+            });
+
+            // Fetch and display all tasks
+            function loadTasks() {
+                document.getElementById("loading-tasks").style.display = "block";
+                taskList.innerHTML = "";
+
+                fetch(`${API_URL}/tasks`)
+                    .then((response) => response.json())
+                    .then((tasks) => {
+                        document.getElementById("loading-tasks").style.display = "none";
+                        if (tasks.length === 0) {
+                            taskList.innerHTML = `
+                                <div class="empty-state">
+                                    <i class="fas fa-clipboard-list"></i>
+                                    <p>No tasks found. Create your first task!</p>
+                                    <button id="create-first-task"><i class="fas fa-plus-circle"></i> Create Task</button>
+                                </div>`;
+                            document.getElementById("create-first-task").addEventListener("click", () => {
+                                tabButtons.forEach(btn => btn.classList.remove("active"));
+                                tabContents.forEach(content => content.classList.remove("active"));
+                                document.querySelector('[data-tab="create"]').classList.add("active");
+                                document.getElementById("create").classList.add("active");
+                            });
+                            return;
+                        }
+
+                        tasks.forEach((task) => {
+                            const taskElement = document.createElement("div");
+                            taskElement.className = "task-item";
+
+                            // Format the description with markdown-like rendering
+                            const formattedDescription = formatDescription(task.description);
+
+                            taskElement.innerHTML = `
+                                <h3>${task.title}</h3>
+                                <div class="task-description">
+                                    ${formattedDescription}
+                                    <div class="fade-overlay"></div>
+                                </div>
+                                <button class="toggle-description">Show More</button>
+                                <div class="action-buttons">
+                                    <button class="edit-btn" data-id="${task.id}"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="delete-btn delete" data-id="${task.id}"><i class="fas fa-trash-alt"></i> Delete</button>
+                                </div>
+                            `;
+                            taskList.appendChild(taskElement);
+
+                            // Get the toggle button and description div
+                            const descDiv = taskElement.querySelector('.task-description');
+                            const toggleBtn = taskElement.querySelector('.toggle-description');
+
+                            // Add event listener to toggle button
+                            toggleBtn.addEventListener('click', toggleDescription);
+
+                            // Check if we need the toggle button (wait a moment for rendering)
+                            setTimeout(() => {
+                                checkDescriptionLength(descDiv, toggleBtn);
+                            }, 0);
+                        });
+
+                        // Add event listeners to edit buttons
+                        document
+                            .querySelectorAll(".edit-btn")
+                            .forEach((button) => {
+                                button.addEventListener("click", function () {
+                                    const taskId = this.getAttribute("data-id");
+                                    loadTaskForEdit(taskId);
+                                });
+                            });
+
+                        // Add event listeners to delete buttons
+                        document
+                            .querySelectorAll(".delete-btn")
+                            .forEach((button) => {
+                                button.addEventListener("click", function () {
+                                    const taskId = this.getAttribute("data-id");
+                                    deleteTask(taskId);
+                                });
+                            });
+                    })
+                    .catch((error) => {
+                        document.getElementById("loading-tasks").style.display = "none";
+                        console.error("Error loading tasks:", error);
+                        taskList.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <p>Error loading tasks. Please try again.</p>
+                                <button id="retry-loading"><i class="fas fa-sync-alt"></i> Retry</button>
+                            </div>`;
+                        document.getElementById("retry-loading").addEventListener("click", loadTasks);
+                    });
+            }
+
+            // Load a task for editing
+            function loadTaskForEdit(taskId) {
+                fetch(`${API_URL}/tasks/${taskId}`)
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then((task) => {
+                        document.getElementById("edit-id").value = task.id;
+                        document.getElementById("edit-title").value = task.title;
+                        document.getElementById("edit-description").value = task.description;
+                        editForm.style.display = "block";
+                        editPlaceholder.style.display = "none";
+
+                        // Switch to edit tab
+                        tabButtons.forEach((btn) => btn.classList.remove("active"));
+                        tabContents.forEach((content) => content.classList.remove("active"));
+                        document.querySelector('[data-tab="edit"]').classList.add("active");
+                        document.getElementById("edit").classList.add("active");
+                    })
+                    .catch((error) => {
+                        console.error("Error loading task for edit:", error);
+                        alert("Error loading task. Please try again.");
+                    });
+            }
+
+            // Cancel edit
+            cancelEditButton.addEventListener("click", function() {
+                editForm.reset();
+                editForm.style.display = "none";
+                editPlaceholder.style.display = "block";
+
+                // Switch back to tasks tab
+                tabButtons.forEach((btn) => btn.classList.remove("active"));
+                tabContents.forEach((content) => content.classList.remove("active"));
+                document.querySelector('[data-tab="tasks"]').classList.add("active");
+                document.getElementById("tasks").classList.add("active");
+            });
+
+            // Delete a task
+            function deleteTask(taskId) {
+                if (confirm("Are you sure you want to delete this task?")) {
+                    fetch(`${API_URL}/tasks/${taskId}`, {
+                        method: "DELETE",
+                    })
+                        .then((response) => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then((data) => {
+                            // Show success message in a prettier way
+                            const notification = document.createElement("div");
+                            notification.style.position = "fixed";
+                            notification.style.top = "20px";
+                            notification.style.right = "20px";
+                            notification.style.padding = "15px 20px";
+                            notification.style.background = "var(--success-color)";
+                            notification.style.color = "white";
+                            notification.style.borderRadius = "8px";
+                            notification.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.15)";
+                            notification.style.zIndex = "1000";
+                            notification.style.animation = "slideIn 0.3s forwards";
+                            notification.innerHTML = "<i class='fas fa-check-circle'></i> Task deleted successfully!";
+
+                            document.body.appendChild(notification);
+
+                            setTimeout(() => {
+                                notification.style.animation = "slideOut 0.3s forwards";
+                                setTimeout(() => {
+                                    document.body.removeChild(notification);
+                                }, 300);
+                            }, 3000);
+
+                            loadTasks();
+                        })
+                        .catch((error) => {
+                            console.error("Error deleting task:", error);
+                            alert("Error deleting task. Please try again.");
+                        });
+                }
+             }
+
+             // Create a new task
+             createForm.addEventListener("submit", function (e) {
+                 e.preventDefault();
+                 const title = document.getElementById("title").value;
+                 const aiModel = document.querySelector(
+                     'input[name="ai-model"]:checked',
+                 ).value;
+
+                 let endpoint = "/tasks";
+                 if (aiModel === "ollama") {
+                     endpoint = "/tasks/ollama";
+                 } else if (aiModel === "gemini") {
+                     endpoint = "/tasks/gemini";
+                 }
+
+                 document.getElementById("loading-create").style.display = "block";
+
+                 fetch(`${API_URL}${endpoint}`, {
+                     method: "POST",
+                     headers: {
+                         "Content-Type": "application/json",
+                     },
+                     body: JSON.stringify({
+                         title: title,
+                     }),
+                 })
+                     .then((response) => {
+                         if (!response.ok) {
+                             throw new Error('Network response was not ok');
+                         }
+                         return response.json();
+                     })
+                     .then((data) => {
+                         document.getElementById("loading-create").style.display = "none";
+
+                         // Show success toast notification
+                         const notification = document.createElement("div");
+                         notification.style.position = "fixed";
+                         notification.style.top = "20px";
+                         notification.style.right = "20px";
+                         notification.style.padding = "15px 20px";
+                         notification.style.background = "var(--success-color)";
+                         notification.style.color = "white";
+                         notification.style.borderRadius = "8px";
+                         notification.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.15)";
+                         notification.style.zIndex = "1000";
+                         notification.style.animation = "slideIn 0.3s forwards";
+                         notification.innerHTML = "<i class='fas fa-check-circle'></i> Task created successfully!";
+
+                         document.body.appendChild(notification);
+
+                         setTimeout(() => {
+                             notification.style.animation = "slideOut 0.3s forwards";
+                             setTimeout(() => {
+                                 document.body.removeChild(notification);
+                             }, 300);
+                         }, 3000);
+
+                         createForm.reset();
+
+                         // Switch to tasks tab and refresh
+                         tabButtons.forEach((btn) =>
+                             btn.classList.remove("active"),
+                         );
+                         tabContents.forEach((content) =>
+                             content.classList.remove("active"),
+                         );
+                         document
+                             .querySelector('[data-tab="tasks"]')
+                             .classList.add("active");
+                         document
+                             .getElementById("tasks")
+                             .classList.add("active");
+                         loadTasks();
+                     })
+                     .catch((error) => {
+                         document.getElementById("loading-create").style.display = "none";
+                         console.error("Error creating task:", error);
+
+                         // Show error toast notification
+                         const notification = document.createElement("div");
+                         notification.style.position = "fixed";
+                         notification.style.top = "20px";
+                         notification.style.right = "20px";
+                         notification.style.padding = "15px 20px";
+                         notification.style.background = "var(--danger-color)";
+                         notification.style.color = "white";
+                         notification.style.borderRadius = "8px";
+                         notification.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.15)";
+                         notification.style.zIndex = "1000";
+                         notification.style.animation = "slideIn 0.3s forwards";
+                         notification.innerHTML = "<i class='fas fa-exclamation-circle'></i> Error creating task. Please try again.";
+
+                         document.body.appendChild(notification);
+
+                         setTimeout(() => {
+                             notification.style.animation = "slideOut 0.3s forwards";
+                             setTimeout(() => {
+                                 document.body.removeChild(notification);
+                             }, 300);
+                         }, 3000);
+                     });
+             });
+
+             // Update a task
+             editForm.addEventListener("submit", function (e) {
+                 e.preventDefault();
+                 const taskId = document.getElementById("edit-id").value;
+                 const title = document.getElementById("edit-title").value;
+                 const description = document.getElementById("edit-description").value;
+
+                 document.getElementById("loading-edit").style.display = "block";
+
+                 fetch(`${API_URL}/tasks/${taskId}`, {
+                     method: "PUT",
+                     headers: {
+                         "Content-Type": "application/json",
+                     },
+                     body: JSON.stringify({
+                         title: title,
+                         description: description,
+                     }),
+                 })
+                     .then((response) => {
+                         if (!response.ok) {
+                             throw new Error('Network response was not ok');
+                         }
+                         return response.json();
+                     })
+                     .then((data) => {
+                         document.getElementById("loading-edit").style.display = "none";
+
+                         // Show success toast notification
+                         const notification = document.createElement("div");
+                         notification.style.position = "fixed";
+                         notification.style.top = "20px";
+                         notification.style.right = "20px";
+                         notification.style.padding = "15px 20px";
+                         notification.style.background = "var(--success-color)";
+                         notification.style.color = "white";
+                         notification.style.borderRadius = "8px";
+                         notification.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.15)";
+                         notification.style.zIndex = "1000";
+                         notification.style.animation = "slideIn 0.3s forwards";
+                         notification.innerHTML = "<i class='fas fa-check-circle'></i> Task updated successfully!";
+
+                         document.body.appendChild(notification);
+
+                         setTimeout(() => {
+                             notification.style.animation = "slideOut 0.3s forwards";
+                             setTimeout(() => {
+                                 document.body.removeChild(notification);
+                             }, 300);
+                         }, 3000);
+
+                         editForm.reset();
+                         editForm.style.display = "none";
+                         editPlaceholder.style.display = "block";
+
+                         // Switch to tasks tab and refresh
+                         tabButtons.forEach((btn) =>
+                             btn.classList.remove("active"),
+                         );
+                         tabContents.forEach((content) =>
+                             content.classList.remove("active"),
+                         );
+                         document
+                             .querySelector('[data-tab="tasks"]')
+                             .classList.add("active");
+                         document
+                             .getElementById("tasks")
+                             .classList.add("active");
+                         loadTasks();
+                     })
+                     .catch((error) => {
+                         document.getElementById("loading-edit").style.display = "none";
+                         console.error("Error updating task:", error);
+
+                         // Show error toast notification
+                         const notification = document.createElement("div");
+                         notification.style.position = "fixed";
+                         notification.style.top = "20px";
+                         notification.style.right = "20px";
+                         notification.style.padding = "15px 20px";
+                         notification.style.background = "var(--danger-color)";
+                         notification.style.color = "white";
+                         notification.style.borderRadius = "8px";
+                         notification.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.15)";
+                         notification.style.zIndex = "1000";
+                         notification.style.animation = "slideIn 0.3s forwards";
+                         notification.innerHTML = "<i class='fas fa-exclamation-circle'></i> Error updating task. Please try again.";
+
+                         document.body.appendChild(notification);
+
+                         setTimeout(() => {
+                             notification.style.animation = "slideOut 0.3s forwards";
+                             setTimeout(() => {
+                                 document.body.removeChild(notification);
+                             }, 300);
+                         }, 3000);
+                     });
+             });
+
+             // Toast notification animations
+             const style = document.createElement('style');
+             style.textContent = `
+                 @keyframes slideIn {
+                     from { transform: translateX(100%); opacity: 0; }
+                     to { transform: translateX(0); opacity: 1; }
+                 }
+
+                 @keyframes slideOut {
+                     from { transform: translateX(0); opacity: 1; }
+                     to { transform: translateX(100%); opacity: 0; }
+                 }
+             `;
+             document.head.appendChild(style);
+
+             // Refresh tasks
+             refreshButton.addEventListener("click", function() {
+                 // Add a rotation animation to the refresh button when clicked
+                 this.querySelector('i').style.animation = 'rotate 0.5s linear';
+                 setTimeout(() => {
+                     this.querySelector('i').style.animation = 'none';
+                 }, 500);
+
+                 loadTasks();
+             });
+
+             // Add rotation animation for refresh icon
+             const refreshStyle = document.createElement('style');
+             refreshStyle.textContent = `
+                 @keyframes rotate {
+                     from { transform: rotate(0deg); }
+                     to { transform: rotate(360deg); }
+                 }
+             `;
+             document.head.appendChild(refreshStyle);
+
+             // Load tasks on page load
+             document.addEventListener("DOMContentLoaded", function() {
+                 loadTasks();
+
+                 // Check for system dark mode preference if no saved theme
+                 if (!localStorage.getItem("theme")) {
+                     const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                     if (prefersDarkMode) {
+                         document.documentElement.setAttribute("data-theme", "dark");
+                         themeToggle.querySelector("i").classList.remove("fa-moon");
+                         themeToggle.querySelector("i").classList.add("fa-sun");
+                     }
+                 }
+             });
+         </script>
+     </body>
+ </html>
