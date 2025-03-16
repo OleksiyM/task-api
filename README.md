@@ -1,3 +1,26 @@
+- [Task API](#task-api)
+  - [Features](#features)
+  - [Prerequisites](#prerequisites)
+  - [Installation \& Setup](#installation--setup)
+    - [Using Docker (Recommended)](#using-docker-recommended)
+    - [Local Development](#local-development)
+  - [Testing with the Simple GUI](#testing-with-the-simple-gui)
+  - [API Endpoints](#api-endpoints)
+  - [Usage Examples](#usage-examples)
+    - [Create a task with Gemini description](#create-a-task-with-gemini-description)
+    - [Create a task with Ollama description](#create-a-task-with-ollama-description)
+    - [Get all tasks](#get-all-tasks)
+    - [Get a specific task](#get-a-specific-task)
+    - [Update a task](#update-a-task)
+    - [Delete a task](#delete-a-task)
+  - [Configuration](#configuration)
+    - [Claude integration](#claude-integration)
+    - [Gemini integration](#gemini-integration)
+    - [Ollama integration](#ollama-integration)
+    - [Docker volumes (persist data)](#docker-volumes-persist-data)
+  - [Notes](#notes)
+  - [License](#license)
+
 # Task API
 
 A RESTful API for task management with AI-powered task description generation using various AI models via [Ollama](https://ollama.ai/), [Anthropic](https://www.anthropic.com/), and [Google Gemini](https://developers.google.com/chat/gemini).
