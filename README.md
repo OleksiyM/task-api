@@ -124,15 +124,32 @@ curl -X DELETE http://localhost:8080/tasks/1
 
 ## Configuration
 
+### Claude integration
+
 For Claude integration, update the API key in the `createTask` function in `main.go`:
 
 ```go
 SetHeader("Authorization", "Bearer YOUR_ANTHROPIC_API_KEY").
 ```
 
+### Gemini integration
+
 For Gemini integration, set the `GEMINI_API_KEY` environment variable.
 
+### Ollama integration
+
 For Ollama integration, ensure Ollama is running locally on port 11434.
+
+### Docker volumes (persist data)
+
+You can uncomment those lines
+
+```
+    #volumes:
+    #  - ./tasks.db:/app/tasks.db
+```
+
+in the `docker-compose.yml` file and will be able to save data locally from the container using Docker volumes and persist data across container restarts.
 
 ## Notes
 
