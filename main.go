@@ -60,7 +60,7 @@ func main() {
 		panic(err)
 	}
 
-	// Routes
+	// Routes init
 	r := gin.Default()
 
 	// Add CORS middleware
