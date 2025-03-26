@@ -182,4 +182,4 @@ in the `docker-compose.yml` file and will be able to save data locally from the 
 
 ## License
 
-MIT
+This project is licensed under the MIT License.
